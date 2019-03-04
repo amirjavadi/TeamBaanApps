@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Animated, Dimensions, Easing, NetInfo, Platform} from 'react-native';
+import {Animated, Dimensions, Easing, NetInfo, Platform, AsyncStorage} from 'react-native';
 import {Container, View, Text, Button, Icon} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import DotIndicator from 'react-native-indicators/src/components/dot-indicator';
@@ -8,6 +8,7 @@ import api from '../api';
 import version from './../version';
 import BaseLightbox from './lightbox/BaseLightbox';
 import Communications from 'react-native-communications';
+import DeviceInfo from 'react-native-device-info';
 
 const {width: deviceWidth, height: deviceHeight} = Dimensions.get('window');
 
@@ -26,6 +27,7 @@ export default class Splash extends Component {
       title: 'شتاب دهنده',
       interval: null,
       needUpdate: false,
+      location: '',
     }
   }
 
@@ -36,6 +38,18 @@ export default class Splash extends Component {
       })
       .catch((error) => {
       })
+  }
+
+  async splash() {
+    await AsyncStorage.getItem('firstTime').then((result) => {
+      if (result === null) {
+        this.setState({status: 1});
+        AsyncStorage.setItem('firstTime', JSON.stringify(1));
+      } else if (result === '1') {
+        this.setState({status: 3});
+        AsyncStorage.setItem('firstTime', JSON.stringify(1));
+      }
+    });
   }
 
   componentDidMount() {
@@ -50,6 +64,7 @@ export default class Splash extends Component {
     },300);
     setTimeout(() => {
       this.animate2();
+      this.splash();
     },800);
     setTimeout(() => {
       this.animate3();
@@ -57,6 +72,7 @@ export default class Splash extends Component {
     setTimeout(() => {
       this.animate4();
       this.animate5();
+      this.setLog();
       this.checkTitle();
     },1200);
     setTimeout(() => {
@@ -66,6 +82,34 @@ export default class Splash extends Component {
 
   componentWillUnmount() {
     clearInterval(this.state.interval);
+  }
+
+  async setLog() {
+    let headers = {
+      'Content-Type': 'application/json',
+    };
+    let systemVersion = DeviceInfo.getSystemVersion();
+    let getManufacturer = DeviceInfo.getManufacturer();
+    let getUniqueID = DeviceInfo.getUniqueID();
+    let getModel = DeviceInfo.getModel();
+    let getVersion = DeviceInfo.getVersion();
+    this.setState({appVersion: getVersion, model: getModel, uniqueId: getUniqueID, company: getManufacturer, osVersion: systemVersion, OS: Platform.OS});
+    await navigator.geolocation.getCurrentPosition((position) => this.setState({location: `POINT ${position.coords.latitude} ${position.coords.longitude}`}));
+    let data = {
+      appVersion: getVersion,
+      Device: getModel,
+      IMEI: getUniqueID,
+      company: getManufacturer,
+      osVersion: systemVersion,
+      OS: Platform.OS,
+      geometryString: this.state.location,
+      Status: this.state.status,
+    };
+    axios.post(api.url + '/api/log/addlog', JSON.stringify(data), {headers: headers})
+      .then((response) => {
+        //do nothing
+      })
+      .catch((error) => {console.info(error)})
   }
 
   async _checkNetwork() {

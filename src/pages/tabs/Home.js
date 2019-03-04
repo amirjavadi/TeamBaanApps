@@ -63,8 +63,8 @@ export default class Home extends React.Component {
                     }
                   }), color: 'white', fontSize: 16}}>درباره طرح</Text>
               </TouchableOpacity>
-              <View style={{borderBottomWidth: 30, borderBottomColor: 'transparent', borderLeftColor: '#f7bd42', borderLeftWidth: deviceWidth / 2 - 10}}/>
-              <View style={{marginTop: -23, zIndex: 2, borderTopWidth: 30, borderTopColor: 'transparent', borderRightColor: '#8484fe', borderRightWidth: deviceWidth / 2 - 10}}/>
+              <View style={{width: 0, height: 0, borderBottomWidth: 15, borderTopWidth: 15, borderTopColor: '#f7bd42', borderBottomColor: 'transparent', borderLeftColor: '#f7bd42', borderLeftWidth: deviceWidth / 4 - 5, borderRightWidth: deviceWidth / 4 - 5, borderRightColor: 'transparent'}}/>
+              <View style={{width: 0, height: 0, marginTop: -23, zIndex: 2, borderTopColor: 'transparent', borderRightColor: '#8484fe', borderLeftColor: 'transparent', borderBottomColor: '#8484fe', borderRightWidth: deviceWidth / 4 - 5, borderLeftWidth: deviceWidth / 4 - 5, borderTopWidth: 15, borderBottomWidth: 15, }}/>
               <TouchableOpacity activeOpacity={1} style={{backgroundColor: '#8484fe', width: deviceWidth / 2 - 10, height: deviceWidth / 2 - 70, marginTop: -0.5, alignItems: 'center', justifyContent: 'center'}} onPress={() => this.check('events')}>
                 <Icon type="FontAwesome" name="bullhorn" style={{color: 'white', fontSize: deviceWidth > 760 ? 60 : 50}}/>
                 <Text style={{...Platform.select({
@@ -95,8 +95,8 @@ export default class Home extends React.Component {
                     }
                   }), color: 'white', fontSize: 16}}>درباره پشتیبان</Text>
               </TouchableOpacity>
-              <View style={{borderBottomWidth: 30, borderBottomColor: 'transparent', borderRightColor: '#5dd243', borderRightWidth: deviceWidth / 2 - 10}}/>
-              <View style={{marginTop: -23, zIndex: 2, borderTopWidth: 30, borderTopColor: 'transparent', borderLeftColor: '#e66bae', borderLeftWidth: deviceWidth / 2 - 10}}/>
+              <View style={{width: 0, height: 0, borderBottomColor: 'transparent', borderLeftColor: 'transparent', borderRightColor: '#5dd243', borderTopColor: '#5dd243', borderBottomWidth: 15, borderTopWidth: 15, borderRightWidth: deviceWidth / 4 - 5, borderLeftWidth: deviceWidth / 4 - 5}}/>
+              <View style={{width: 0, height: 0, marginTop: -23, zIndex: 2, borderTopColor: 'transparent', borderLeftColor: '#e66bae', borderBottomColor: '#e66bae', borderRightColor: 'transparent', borderTopWidth: 15, borderBottomWidth: 15, borderLeftWidth: deviceWidth / 4 - 5, borderRightWidth: deviceWidth / 4 - 5}}/>
               <TouchableOpacity activeOpacity={1} style={{backgroundColor: '#e66bae', width: deviceWidth / 2 - 10, height: deviceWidth / 2 - 100, marginTop: -0.5, alignItems: 'center', justifyContent: 'center'}} onPress={() => this.check('workShops')}>
                 <Icon type="FontAwesome" name="briefcase" style={{color: 'white', fontSize: deviceWidth > 760 ? 60 : 50}}/>
                 <Text style={{...Platform.select({

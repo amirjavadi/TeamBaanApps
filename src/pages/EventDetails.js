@@ -17,7 +17,6 @@ export default class EventDetails extends Component {
 
   componentWillMount() {
     let txt = this.props.item.more;
-    console.log(this.props.item);
     let text1 = txt.replace(/(<([^>]+)>)/ig, '');
     let text2 = text1.replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '');
     let text3 = text2.replace(/[A-Za-z]/g, '');

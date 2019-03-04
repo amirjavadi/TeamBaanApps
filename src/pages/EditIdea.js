@@ -7,8 +7,62 @@ import axios from 'axios';
 import api from './../api';
 import {DotIndicator} from 'react-native-indicators';
 import {Actions} from 'react-native-router-flux';
+import RNPickerSelect from "react-native-picker-select";
 
 const {width: deviceWidth, height: deviceHeight} = Dimensions.get('window');
+
+const items = [
+  {
+    label: 'دیپلم',
+    value: 'دیپلم',
+  },
+  {
+    label: 'فوق دیپلم',
+    value: 'فوق دیپلم',
+  },
+  {
+    label: 'لیسانس',
+    value: 'لیسانس',
+  },
+  {
+    label: 'فوق لیسانس',
+    value: 'فوق لیسانس',
+  },
+  {
+    label: 'دکترا',
+    value: 'دکترا',
+  },
+];
+const items1 = [
+  {
+    label: 'صنعتی',
+    value: 'صنعتی',
+  },
+  {
+    label: 'کشاورزی',
+    value: 'کشاورزی',
+  },
+  {
+    label: 'خدماتی',
+    value: 'خدماتی',
+  },
+  {
+    label: 'پزشکی',
+    value: 'پزشکی',
+  },
+  {
+    label: 'فرهنگی',
+    value: 'فرهنگی',
+  },
+  {
+    label: 'مشاغل خانگی',
+    value: 'مشاغل خانگی',
+  },
+  {
+    label: 'سایر',
+    value: 'سایر',
+  },
+];
 
 export default class EditIdea extends React.Component {
 
@@ -318,17 +372,24 @@ export default class EditIdea extends React.Component {
                 <TextInput value={this.state.job} style={{width: deviceWidth - 40, borderBottomWidth: 1, borderBottomColor: recordErrors['jobType'] ? 'red' : '#dcdcdc', padding: 5, textAlign: 'right', direction: 'rtl', fontFamily: 'Vazir-FD', color: '#333333', fontSize: 14}} onChangeText={(text) => this._setValue('job', text)}/>
               </View>
             </View>
-            <View style={{flexDirection: 'column', padding: 0, marginTop: 20, borderBottomWidth: 1, borderBottomColor: recordErrors['coarseType'] ? 'red' : '#dcdcdc'}}>
+            <View style={{width: deviceWidth - 40, flexDirection: 'column', padding: 0, marginTop: 20, borderBottomWidth: 1, borderBottomColor: recordErrors['coarseType'] ? 'red' : '#dcdcdc'}}>
               <View Style={{flexDirection: 'column'}}>
                 <Text style={{fontFamily: 'Vazir-FD', fontSize: 14, color: '#888888'}}>میزان تحصیلات* :</Text>
-                <Picker style={{width: deviceWidth - 40, height: 35, marginTop: 5}} selectedValue={this.state.coarseValue} mode="dialog" onValueChange={(itemValue) => this._changeValue('coarse', itemValue)}>
-                  <Picker.Item key={'choose'} label='انتخاب کنید...' value={0} />
-                  <Picker.Item key={'دیپلم'} label='دیپلم' value='دیپلم' />
-                  <Picker.Item key={'فوق دیپلم'} label='فوق دیپلم' value='فوق دیپلم' />
-                  <Picker.Item key={'لیسانس'} label='لیسانس' value='لیسانس' />
-                  <Picker.Item key={'فوق لیسانس'} label='فوق لیسانس' value='فوق لیسانس' />
-                  <Picker.Item key={'دکترا'} label='دکترا' value='دکترا' />
-                </Picker>
+                {/*<Picker style={{width: deviceWidth - 40, height: 35, marginTop: 5}} selectedValue={this.state.coarseValue} mode="dialog" onValueChange={(itemValue) => this._changeValue('coarse', itemValue)}>*/}
+                  {/*<Picker.Item key={'choose'} label='انتخاب کنید...' value={0} />*/}
+                  {/*<Picker.Item key={'دیپلم'} label='دیپلم' value='دیپلم' />*/}
+                  {/*<Picker.Item key={'فوق دیپلم'} label='فوق دیپلم' value='فوق دیپلم' />*/}
+                  {/*<Picker.Item key={'لیسانس'} label='لیسانس' value='لیسانس' />*/}
+                  {/*<Picker.Item key={'فوق لیسانس'} label='فوق لیسانس' value='فوق لیسانس' />*/}
+                  {/*<Picker.Item key={'دکترا'} label='دکترا' value='دکترا' />*/}
+                {/*</Picker>*/}
+                <RNPickerSelect
+                  style={{width: deviceWidth - 40, height: Platform.OS === 'ios' ? 45 : 30, marginTop: 5}}
+                  onValueChange={(itemValue) => this._changeValue('coarse', itemValue)}
+                  items={items}
+                  useNativeAndroidPickerStyle={true}
+                  doneText="تایید"
+                  placeholder={{label: 'انتخاب کنید...',value: null}}/>
               </View>
             </View>
             <View style={{flexDirection: 'column', padding: 0, marginTop: 20}}>
@@ -361,19 +422,26 @@ export default class EditIdea extends React.Component {
                 <TextInput value={this.state.title} style={{width: deviceWidth - 40, borderBottomWidth: 1, borderBottomColor: recordErrors['titleType'] ? 'red' : '#dcdcdc', padding: 5, textAlign: 'right', direction: 'rtl', fontFamily: 'Vazir-FD', color: '#333333', fontSize: 14}} onChangeText={(text) => this._setValue('title', text)}/>
               </View>
             </View>
-            <View style={{flexDirection: 'column', padding: 0, marginTop: 20, borderBottomWidth: 1, borderBottomColor: recordErrors['fieldType'] ? 'red' : '#dcdcdc'}}>
+            <View style={{width: deviceWidth - 40, flexDirection: 'column', padding: 0, marginTop: 20, borderBottomWidth: 1, borderBottomColor: recordErrors['fieldType'] ? 'red' : '#dcdcdc'}}>
               <View Style={{flexDirection: 'column'}}>
                 <Text style={{fontFamily: 'Vazir-FD', fontSize: 14, color: '#888888'}}>تخصص ایده* :</Text>
-                <Picker style={{width: deviceWidth - 40, height: 35, marginTop: 5}} selectedValue={this.state.fieldValue} mode="dialog" onValueChange={(itemValue) => this._changeValue('field', itemValue)}>
-                  <Picker.Item key={'choose'} label='انتخاب کنید...' value={0} />
-                  <Picker.Item key={'صنعتی'} label='صنعتی' value='صنعتی' />
-                  <Picker.Item key={'کشاورزی'} label='کشاورزی' value='کشاورزی' />
-                  <Picker.Item key={'خدماتی'} label='خدماتی' value='خدماتی' />
-                  <Picker.Item key={'پزشکی'} label='پزشکی' value='پزشکی' />
-                  <Picker.Item key={'فرهنگی'} label='فرهنگی' value='فرهنگی' />
-                  <Picker.Item key={'مشاغل خانگی'} label='مشاغل خانگی' value='مشاغل خانگی' />
-                  <Picker.Item key={'سایر'} label='سایر' value='سایر' />
-                </Picker>
+                {/*<Picker style={{width: deviceWidth - 40, height: 35, marginTop: 5}} selectedValue={this.state.fieldValue} mode="dialog" onValueChange={(itemValue) => this._changeValue('field', itemValue)}>*/}
+                  {/*<Picker.Item key={'choose'} label='انتخاب کنید...' value={0} />*/}
+                  {/*<Picker.Item key={'صنعتی'} label='صنعتی' value='صنعتی' />*/}
+                  {/*<Picker.Item key={'کشاورزی'} label='کشاورزی' value='کشاورزی' />*/}
+                  {/*<Picker.Item key={'خدماتی'} label='خدماتی' value='خدماتی' />*/}
+                  {/*<Picker.Item key={'پزشکی'} label='پزشکی' value='پزشکی' />*/}
+                  {/*<Picker.Item key={'فرهنگی'} label='فرهنگی' value='فرهنگی' />*/}
+                  {/*<Picker.Item key={'مشاغل خانگی'} label='مشاغل خانگی' value='مشاغل خانگی' />*/}
+                  {/*<Picker.Item key={'سایر'} label='سایر' value='سایر' />*/}
+                {/*</Picker>*/}
+                <RNPickerSelect
+                  style={{width: deviceWidth - 40, height: Platform.OS === 'ios' ? 45 : 30, marginTop: 5}}
+                  onValueChange={(itemValue) => this._changeValue('field', itemValue)}
+                  items={items1}
+                  useNativeAndroidPickerStyle={true}
+                  doneText="تایید"
+                  placeholder={{label: 'انتخاب کنید...',value: null}}/>
               </View>
             </View>
             <View style={{flexDirection: 'column', padding: 0, marginTop: 20}}>
