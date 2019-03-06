@@ -28,6 +28,7 @@ export default class Splash extends Component {
       interval: null,
       needUpdate: false,
       location: '',
+      status: '',
     }
   }
 
@@ -43,11 +44,11 @@ export default class Splash extends Component {
   async splash() {
     await AsyncStorage.getItem('firstTime').then((result) => {
       if (result === null) {
-        this.setState({status: 1});
-        AsyncStorage.setItem('firstTime', JSON.stringify(1));
-      } else if (result === '1') {
-        this.setState({status: 3});
-        AsyncStorage.setItem('firstTime', JSON.stringify(1));
+        this.setState({status: 'install'});
+        AsyncStorage.setItem('firstTime', 'install');
+      } else if (result === 'install') {
+        this.setState({status: 'run'});
+        AsyncStorage.setItem('firstTime', 'install');
       }
     });
   }
@@ -93,8 +94,6 @@ export default class Splash extends Component {
     let getUniqueID = DeviceInfo.getUniqueID();
     let getModel = DeviceInfo.getModel();
     let getVersion = DeviceInfo.getVersion();
-    this.setState({appVersion: getVersion, model: getModel, uniqueId: getUniqueID, company: getManufacturer, osVersion: systemVersion, OS: Platform.OS});
-    await navigator.geolocation.getCurrentPosition((position) => this.setState({location: `POINT ${position.coords.latitude} ${position.coords.longitude}`}));
     let data = {
       appVersion: getVersion,
       Device: getModel,
@@ -102,9 +101,9 @@ export default class Splash extends Component {
       company: getManufacturer,
       osVersion: systemVersion,
       OS: Platform.OS,
-      geometryString: this.state.location,
       Status: this.state.status,
     };
+    console.log(1, data);
     axios.post(api.url + '/api/log/addlog', JSON.stringify(data), {headers: headers})
       .then((response) => {
         //do nothing
