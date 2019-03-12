@@ -1,3 +1,3 @@
 export default {
-  versionCode: '1',
+  versionCode: '2',
 };

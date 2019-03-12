@@ -29,6 +29,8 @@ export default class Splash extends Component {
       needUpdate: false,
       location: '',
       status: '',
+      ver: '',
+      url: '',
     }
   }
 
@@ -94,16 +96,18 @@ export default class Splash extends Component {
     let getUniqueID = DeviceInfo.getUniqueID();
     let getModel = DeviceInfo.getModel();
     let getVersion = DeviceInfo.getVersion();
+    let OS = Platform.OS === 'android' ? 'Android' : 'IOS';
     let data = {
-      appVersion: getVersion,
-      Device: getModel,
-      IMEI: getUniqueID,
-      company: getManufacturer,
-      osVersion: systemVersion,
-      OS: Platform.OS,
-      Status: this.state.status,
+      OS: OS,
+      action: null,
+      imei: getUniqueID,
+      versionOS: systemVersion,
+      versionApp: getVersion,
+      versionCodeApp: null,
+      factory: getManufacturer,
+      modelFactory: getModel,
+      typelog: this.state.status,
     };
-    console.log(1, data);
     axios.post(api.url + '/api/log/addlog', JSON.stringify(data), {headers: headers})
       .then((response) => {
         //do nothing
@@ -126,19 +130,23 @@ export default class Splash extends Component {
   }
 
   async _checkVersion() {
-    await axios.get(api.url + '/api/ThemeSetting/string/versionApp')
+    await axios.get(api.url + '/api/ThemeSetting/file/download')
       .then((response) => {
         if (response.data == null || response.data == undefined || response.data == '') {
           Actions.reset('drawer')
         } else {
-          if (response.data != version.versionCode) {
+          this.setState({url: response.data[0].src});
+          let string = response.data[0].src.replace('http://teambaan.nicico.com/MediaFolder/App/teambaan_', '');
+          let ver = string.replace('.apk', '');
+          this.setState({ver});
+          if (ver != version.versionCode) {
             this.setState({needUpdate: true})
           } else {
             Actions.reset('drawer')
           }
         }
       })
-      .catch((error) => Actions.reset('drawer'))
+      .catch(() => Actions.reset('drawer'))
   }
 
   animate(){
@@ -191,7 +199,7 @@ export default class Splash extends Component {
   }
 
   _refresh() {
-    this.setState({online: true})
+    this.setState({online: true});
     this._checkNetwork();
   }
 
@@ -204,7 +212,7 @@ export default class Splash extends Component {
             <Text style={{fontFamily: 'Vazir-FD', color: '#333333', fontSize: 14}}>لطفا نرم افزار را بروزرسانی بفرمایید</Text>
             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
               <Button block transparent={true} style={{backgroundColor: '#3fd1c4', borderRadius: 5}}
-                      onPress={() => Communications.web('http://teambaan.nicico.com/mediafolder/app/teambaan_1.apk')}>
+                      onPress={() => Communications.web(this.state.url)}>
                 <Text style={{...Platform.select({
                     ios: {
                       fontFamily: 'Vazir-FD',
